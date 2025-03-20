@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/students")
@@ -22,13 +19,22 @@ public class StudentController {
 
     @PostMapping("/add-student")
     public StudentDto addStudentInfo(@RequestBody @Valid StudentDto studentDto, BindingResult bindingResult) {
-    log.info(this.getClass().getName()+"::addStudentInfo(student) method begins");
-    if(bindingResult.hasErrors()) {
-        bindingResult.getAllErrors().forEach(error -> log.error("error is:"+error.getDefaultMessage()));
-        return null;
+        log.info(this.getClass().getName() + "::addStudentInfo(student) method begins");
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> log.error("error is:" + error.getDefaultMessage()));
+            return null;
+        }
+        StudentDto savedStudentDto = studentService.saveStudent(studentDto);
+        log.info(this.getClass().getName() + "::addStudentInfo(student) method ends");
+        return savedStudentDto;
     }
-    StudentDto savedStudentDto=studentService.saveStudent(studentDto);
-    log.info(this.getClass().getName()+"::addStudentInfo(student) method ends");
-    return savedStudentDto;
+
+    @GetMapping("/find-student")
+    public StudentDto getStudentInfo(@RequestParam("sId") Integer studentId) {
+
+        log.info(this.getClass().getName() + "::getStudentInfo(studentId) method begins");
+        StudentDto studentDto = studentService.findStudent(studentId);
+        log.info(this.getClass().getName() + "::getStudentInfo(studentId) method ends");
+        return studentDto;
     }
 }

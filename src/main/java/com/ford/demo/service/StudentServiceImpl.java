@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -36,6 +37,14 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public StudentDto findStudent(int studentId) {
+
+        Optional<Student> optionalStudent=studentRepository.findById(studentId);
+
+        if(optionalStudent.isPresent()){
+            StudentDto studentDto=StudentMapper.convertToStudentDto(optionalStudent.get());
+            return studentDto;
+        }
+
         return null;
     }
 
