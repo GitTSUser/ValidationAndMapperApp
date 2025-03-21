@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,4 +71,24 @@ class StudentControllerrTest {
                 .andExpect(jsonPath("$.name").value(studentDto.getName()))
                 .andExpect(jsonPath("$.age").value(studentDto.getAge()));
     }
+
+    @Test
+    public void testGetAllStudents() throws Exception {
+        // given - setup
+        StudentDto studentDto1 = new StudentDto(1001, "arun", 22, "CSE", 12000.25, LocalDate.of(2002, 9, 21), "VIT");
+
+        StudentDto studentDto2 = new StudentDto(1002, "varun", 22, "CSE", 12000.25, LocalDate.of(2002, 9, 21), "VIT");
+
+        List<StudentDto> studentDtoList = List.of(studentDto1, studentDto2);
+
+        Mockito.when(studentService.findAllStudents()).thenReturn(studentDtoList);
+
+        //when - testing
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/students/all-students").contentType(MediaType.APPLICATION_JSON));
+
+        //then - verifying
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+    }
+
 }

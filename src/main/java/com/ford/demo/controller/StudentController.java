@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/students")
 @Slf4j
@@ -36,5 +38,13 @@ public class StudentController {
         StudentDto studentDto = studentService.findStudent(studentId);
         log.info(this.getClass().getName() + "::getStudentInfo(studentId) method ends");
         return studentDto;
+    }
+
+    @GetMapping("/all-students")
+    public List<StudentDto> getAllStudentInfo() {
+        log.info(this.getClass().getName() + "::getStudentInfo(studentId) method begins");
+        List<StudentDto> studentDtoList = studentService.findAllStudents();
+        log.info(this.getClass().getName() + "::getStudentInfo(studentId) method ends");
+        return studentDtoList;
     }
 }
