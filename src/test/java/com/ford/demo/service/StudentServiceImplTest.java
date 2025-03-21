@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,13 +48,24 @@ class StudentServiceImplTest {
 
 /*    @Test
     void updateStudent() {
-    }
+    }*/
 
     @Test
     void findStudent() {
+        //given
+        Student student=new Student(1001, "arun", 22, "CSE", 4000.25, LocalDate.of(2001, 10, 22), "VIT");
+        Optional<Student> optionalStudent=Optional.of(student);
+        BDDMockito.when(studentRepository.findById(student.getId())).thenReturn(optionalStudent); //mock behavior
+        //when
+        StudentDto studentDto=studentService.findStudent(student.getId());
+
+        //then
+        Assertions.assertNotNull(studentDto);
+        Assertions.assertEquals(studentDto.getId(), student.getId());
+        Assertions.assertEquals(studentDto.getName(), studentDto.getName());
     }
 
-    @Test
+    /*@Test
     void findAllStudents() {
     }
 
